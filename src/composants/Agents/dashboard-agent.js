@@ -1,13 +1,13 @@
 import UserInfo from "../UserInfo";
 
-function DashboardChef() {
+function DashboardAgent() {
   return (
     <div>
       <UserInfo />
-      <h2>Tableau de bord Chef</h2>
+      <h2>Tableau de bord Agent</h2>
       ...
     </div>
   );
 }
 
-export default DashboardChef;
+export default DashboardAgent;

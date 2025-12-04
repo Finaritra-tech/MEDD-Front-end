@@ -33,9 +33,9 @@ function Login() {
 
       // Redirection selon is_staff
       if (user.is_staff) {
-        navigate("/dashboard-chef");
+        navigate("/Direction/dashboard-chef");
       } else {
-        navigate("/dashboard-agent");
+        navigate("/Agents/dashboard-agent");
       }
 
     } catch (err) {
