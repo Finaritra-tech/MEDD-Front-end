@@ -3,12 +3,12 @@ import axios from "axios";
 
 function AddAgent() {
   const [form, setForm] = useState({
-    nom: "",
-    fonction: "",
-    telephone: "",
-    email: "",
-    mdp: "",
-    direction: "DCSI",
+  nom: "",
+  fonction: "",
+  telephone: "",
+  email: "",
+  password: "", 
+  direction: "DCSI",
   });
 
   const [photo, setPhoto] = useState(null);
@@ -36,7 +36,7 @@ function AddAgent() {
       formData.append("photo", photo);
     }
 
-    if (form.mdp !== confirmPassword) {
+    if (form.password !== confirmPassword) {
       setError("Les mots de passe ne correspondent pas !");
       return;
     }
@@ -70,7 +70,7 @@ function AddAgent() {
         <input type="text" name="fonction" placeholder="Fonction" onChange={handleChange} required />
         <input type="text" name="telephone" placeholder="+261 32 05 558 78" onChange={handleChange} required />
         <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-        <input type="password" name="mdp" placeholder="Mot de passe" value={form.mdp} onChange={handleChange} required />
+        <input type="password" name="password" placeholder="Mot de passe" value={form.password} onChange={handleChange} required />
         <input type="password" name="confirmMdp" placeholder="Confirmer le mot de passe" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required/>
 
         <select name="direction" onChange={handleChange}>
