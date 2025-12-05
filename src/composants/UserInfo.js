@@ -26,6 +26,10 @@ function UserInfo() {
       <h3>Bienvenue, {user.nom} 👋</h3>
       <p>Email : {user.email}</p>
       <p>Rôle : {user.is_staff ? "Chef / Directeur" : "Agent"}</p>
+      <p>Direction : {user.direction}</p>
+
+
+
     </div>
   );
 }

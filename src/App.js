@@ -1,7 +1,8 @@
 import './App.css';
 import AddAgent from './composants/Agents/AddAgent';
 import DashboardAgent from './composants/Agents/dashboard-agent';
-// import DashboardChef from './composants/Direction/dashboard-chef';
+import DashboardChef from './composants/Direction/dashboard-chef';
+import Classique from './composants/Missions/classique';
 import Login from './composants/login';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="/add-agent" element={<AddAgent />} />
           <Route path="/Direction/dashboard-chef" element={<DashboardChef/>} />
           <Route path="/Agents/dashboard-agent" element={<DashboardAgent/>} />
+          <Route path="/Missions/classique" element={<Classique />} />
         </Routes>
       </div>
     </Router>
