@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "./axiosConfig";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -18,25 +18,25 @@ function Login() {
     e.preventDefault();
     setError("");
 
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/login/",
-        form
-      );
+   try {
+    const response = await api.post("login/", form);
 
-      const { access, refresh, user } = response.data;
+    // Déstructurer AVANT de loguer
+    const { access, refresh, user } = response.data;
+    console.log(access, refresh);
+    console.log(user);
 
-      // Stockage JWT dans localStorage
-      localStorage.setItem("access_token", access);
-      localStorage.setItem("refresh_token", refresh);
-      localStorage.setItem("user", JSON.stringify(user));
+    // Stockage JWT dans localStorage
+    localStorage.setItem("access", access);
+    localStorage.setItem("refresh", refresh);
+    localStorage.setItem("user", JSON.stringify(user));
 
-      // Redirection selon is_staff
-      if (user.is_staff) {
-        navigate("/Direction/dashboard-chef");
-      } else {
-        navigate("/Agents/dashboard-agent");
-      }
+    // Redirection selon is_staff
+    if (user.is_staff) {
+      navigate("/Direction/dashboard-chef");
+    } else {
+      navigate("/Agents/dashboard-agent");
+    }
 
     } catch (err) {
       console.error(err);

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../axiosConfig";
 
 function AddAgent() {
   const [form, setForm] = useState({
@@ -41,15 +41,16 @@ function AddAgent() {
       return;
     }
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/agents/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await api.post(
+      "agents/",
+      formData,
+   {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+);
+
 
       alert("Agent ajouté !");
       console.log(response.data);
