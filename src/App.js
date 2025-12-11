@@ -5,6 +5,7 @@ import DashboardChef from './composants/Direction/dashboard-chef';
 import Classique from './composants/Missions/classique';
 import Login from './composants/login';
 import Missions from './composants/Agents/Missions';
+import EditMission from './composants/Agents/EditMission';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/Agents/dashboard-agent" element={<DashboardAgent/>} />
           <Route path="/Missions/classique" element={<Classique />} />
           <Route path="/Agents/Mission" element={<Missions />} />
+          <Route path="/missions/:id/edit" element={<EditMission />} />
         </Routes>
       </div>
     </Router>

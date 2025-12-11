@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../axiosConfig";
+import { useNavigate } from "react-router-dom";
 
 function Missions() {
   const [missions, setMissions] = useState([]);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
 
   // Récupération de l'utilisateur connecté depuis le localStorage
   useEffect(() => {
@@ -62,11 +65,14 @@ function Missions() {
               <strong>Lieu :</strong> {m.lieu} <br />
               <strong>Date :</strong> {m.date_depart} → {m.date_retour} <br />
               <strong>Status :</strong> {m.status} <br />
-              <strong>Créée par :</strong> {user.nom || "Inconnu"}
-            </p>
-          
-            
+              <strong>Créée par :</strong> {user.nom || "Inconnu"} <br/>
+              <strong>Destinataire: </strong> {m.destinataire}
+            </p>            
             <button onClick={() => handleDelete(m.id)} style={{ marginRight: "10px" }}>Supprimer</button>
+            <button onClick={() => navigate(`/missions/${m.id}/edit`)}>Modifier</button>
+            
+           
+
           </li>
         ))}
       </ul>
