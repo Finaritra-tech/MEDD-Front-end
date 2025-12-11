@@ -63,8 +63,9 @@ function Missions() {
               <strong>Date :</strong> {m.date_depart} → {m.date_retour} <br />
               <strong>Status :</strong> {m.status} <br />
               <strong>Créée par :</strong> {user.nom || "Inconnu"}
-
             </p>
+          
+            
             <button onClick={() => handleDelete(m.id)} style={{ marginRight: "10px" }}>Supprimer</button>
           </li>
         ))}
