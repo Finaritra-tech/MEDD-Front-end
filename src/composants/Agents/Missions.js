@@ -65,14 +65,20 @@ function Missions() {
               <strong>Lieu :</strong> {m.lieu} <br />
               <strong>Date :</strong> {m.date_depart} → {m.date_retour} <br />
               <strong>Status :</strong> {m.status} <br />
-              <strong>Créée par :</strong> {user.nom || "Inconnu"} <br/>
-              <strong>Destinataire: </strong> {m.destinataire}
+              <strong>Créée par :</strong> {m.cree_par_nom|| "Inconnu"} <br/>
+              <strong>Destinataire :</strong> 
+                { m.destinataire && m.destinataire !== "" 
+                    ? m.destinataire 
+                    : (m.destinatairee && m.destinatairee !== "" 
+                      ? m.destinatairee 
+                        : "Non défini"
+                    )
+         }
+
+
             </p>            
             <button onClick={() => handleDelete(m.id)} style={{ marginRight: "10px" }}>Supprimer</button>
-            <button onClick={() => navigate(`/missions/${m.id}/edit`)}>Modifier</button>
-            
-           
-
+            <button onClick={() => navigate(`/missions/${m.id}/edit`)}>Modifier</button>       
           </li>
         ))}
       </ul>

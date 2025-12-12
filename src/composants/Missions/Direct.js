@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../axiosConfig";
 
-function Classique() {
+function Direct() {
   const [agents, setAgents] = useState([]);
   const [user, setUser] = useState(null);
 
@@ -13,14 +13,15 @@ function Classique() {
     lieu: "",
     date_depart: "",
     date_retour: "",
-    status: "En attente",
+    status: "Approuvée",
     description: "",
+    destinatairee:""
+
   });
 
   const [error, setError] = useState("");
   const [nbrJours, setNbrJours] = useState(0);
 
-  // Récupération de l'utilisateur connecté depuis le localStorage
   useEffect(() => {
     const stored = localStorage.getItem("user");
     if (stored) {
@@ -34,14 +35,12 @@ function Classique() {
     }
   }, []);
 
-  // Récupération des agents pour le select
 useEffect(() => {
   api.get("agents/")
     .then((res) => setAgents(res.data))
     .catch((err) => console.error(err));
 }, []);
 
-  // Gestion changement formulaire
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -78,16 +77,18 @@ useEffect(() => {
       // Reset formulaire tout en conservant le créateur
       setForm({
         agent: "",
-        cree_par: user?.id || "",
-        cree_par_nom: user?.nom || "",
+        // cree_par: "",
+        // cree_par_nom:"",
         objet: "",
         lieu: "",
         date_depart: "",
         date_retour: "",
         status: "En attente",
         description: "",
+        destinatairee:""
       });
       setNbrJours(0);
+      console.log(form)
 
     } catch (error) {
       console.error(error);
@@ -95,8 +96,7 @@ useEffect(() => {
     }
   };
 
-  // Génération PDF
-  const generatePdf = async () => {
+  const generateePdf = async () => {
     if (user) {
       setForm((prev) => ({
         ...prev,
@@ -107,7 +107,7 @@ useEffect(() => {
 
     try {
       const response = await api.post(
-      "generate-mission-pdf/",
+      "om-pdf/",
       form,
         { responseType: "blob" });
 
@@ -115,7 +115,7 @@ useEffect(() => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "mission.pdf");
+      link.setAttribute("download", "om.pdf");
       document.body.appendChild(link);
       link.click();
     } catch (error) {
@@ -138,7 +138,7 @@ useEffect(() => {
         </select>
 
         {user && (
-            <p style={{ background: "#eee", padding: "10px", borderRadius: "6px" }}>
+          <p style={{ background: "#eee", padding: "10px", borderRadius: "6px" }}>
             <input type="text" value={form.cree_par} readOnly hidden />
             Créée par :<input type="text" value={form.cree_par_nom} readOnly  />
           </p>
@@ -182,9 +182,9 @@ useEffect(() => {
 
         {nbrJours > 0 && <p><strong>Nombre de jours estimé :</strong> {nbrJours}</p>}
 
-        <select name="status" onChange={handleChange} value={form.status} disabled>
+        <select name="status" onChange={handleChange} value={form.status} hidden>
+          <option value="Approuvée">Approuvée</option>  
           <option value="En attente">En attente</option>
-          <option value="Approuvée">Approuvée</option>
           <option value="Rejetée">Rejetée</option>
         </select>
 
@@ -195,14 +195,25 @@ useEffect(() => {
           onChange={handleChange}
         />
 
+
+         <select name="destinatairee" onChange={handleChange} value={form.destinatairee} required>
+          <option value="">-- Choisir le destinataire--</option>
+          {agents.map((a) => (
+            <option key={a.id} value={a.id}>
+              {a.nom} ({a.fonction})
+            </option>
+          ))}
+        </select>
+
+
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <button type="submit">Enregistrer</button>
+        <button type="submit">Envoyer</button>
       </form>
 
-      <button onClick={generatePdf}>Générer PDF</button>
+      <button onClick={generateePdf}>Générer l'ordre de mission</button>
     </div>
   );
 }
 
-export default Classique;
+export default Direct;

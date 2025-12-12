@@ -3,6 +3,7 @@ import AddAgent from './composants/Agents/AddAgent';
 import DashboardAgent from './composants/Agents/dashboard-agent';
 import DashboardChef from './composants/Direction/dashboard-chef';
 import Classique from './composants/Missions/classique';
+import Direct from './composants/Missions/Direct';
 import Login from './composants/login';
 import Missions from './composants/Agents/Missions';
 import EditMission from './composants/Agents/EditMission';
@@ -22,6 +23,7 @@ function App() {
           {/* Agent */}
           <Route path="/Agents/dashboard-agent" element={<DashboardAgent/>} />
           <Route path="/Missions/classique" element={<Classique />} />
+          <Route path="/Missions/direct" element={<Direct />} />
           <Route path="/Agents/Mission" element={<Missions />} />
           <Route path="/missions/:id/edit" element={<EditMission />} />
         </Routes>
