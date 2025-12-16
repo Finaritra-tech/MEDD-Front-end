@@ -8,7 +8,6 @@ function Missions() {
   const navigate = useNavigate();
 
 
-  // Récupération de l'utilisateur connecté depuis le localStorage
   useEffect(() => {
     const stored = localStorage.getItem("user");
     if (stored) {
@@ -16,7 +15,6 @@ function Missions() {
     }
   }, []);
 
-  // Récupération des missions liées à l'utilisateur
   const fetchMissions = async () => {
     if (!user) return;
 
@@ -36,7 +34,6 @@ function Missions() {
     fetchMissions();
   }, [user]);
 
-  // Supprimer une mission
   const handleDelete = async (id) => {
     if (window.confirm("Voulez-vous vraiment supprimer cette mission ?")) {
       try {
@@ -52,7 +49,6 @@ function Missions() {
     }
   };
 
-  // Affichage
   return (
     <div style={{ maxWidth: "800px", margin: "auto" }}>
       <h2>Mes Missions</h2>
@@ -74,11 +70,9 @@ function Missions() {
                         : "Non défini"
                     )
          }
-
-
             </p>            
             <button onClick={() => handleDelete(m.id)} style={{ marginRight: "10px" }}>Supprimer</button>
-            <button onClick={() => navigate(`/missions/${m.id}/edit`)}>Modifier</button>       
+            <button onClick={() => navigate(`/missions/${m.id}/edit`)}>Modifier</button>     
           </li>
         ))}
       </ul>

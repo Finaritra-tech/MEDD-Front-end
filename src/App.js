@@ -7,6 +7,7 @@ import Direct from './composants/Missions/Direct';
 import Login from './composants/login';
 import Missions from './composants/Agents/Missions';
 import EditMission from './composants/Agents/EditMission';
+import Missions_destinataire from './composants/Direction/mission_destinataire';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 
@@ -19,12 +20,12 @@ function App() {
           <Route path="/add-agent" element={<AddAgent />} />
           {/* chef */}
           <Route path="/Direction/dashboard-chef" element={<DashboardChef/>} />
-
           {/* Agent */}
           <Route path="/Agents/dashboard-agent" element={<DashboardAgent/>} />
           <Route path="/Missions/classique" element={<Classique />} />
           <Route path="/Missions/direct" element={<Direct />} />
           <Route path="/Agents/Mission" element={<Missions />} />
+          <Route path="/missions/destinataire" element={<Missions_destinataire />} />
           <Route path="/missions/:id/edit" element={<EditMission />} />
         </Routes>
       </div>
