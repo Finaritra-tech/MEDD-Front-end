@@ -8,6 +8,9 @@ import Login from './composants/login';
 import Missions from './composants/Agents/Missions';
 import EditMission from './composants/Agents/EditMission';
 import Missions_destinataire from './composants/Direction/mission_destinataire';
+import MissionsApprouvees from './composants/Missions/MissionsApprouvées';
+import MissionsRejetees from './composants/Missions/MissionsRejetees';
+import MissionsEnAttente from './composants/Missions/MissionsEnAttente';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 
@@ -27,6 +30,9 @@ function App() {
           <Route path="/Agents/Mission" element={<Missions />} />
           <Route path="/missions/destinataire" element={<Missions_destinataire />} />
           <Route path="/missions/:id/edit" element={<EditMission />} />
+          <Route path="/missions/approuvees" element={<MissionsApprouvees />} />
+          <Route path="/missions/rejetees" element={<MissionsRejetees />} />
+          <Route path="/missions/en-attente" element={<MissionsEnAttente />} />
         </Routes>
       </div>
     </Router>
