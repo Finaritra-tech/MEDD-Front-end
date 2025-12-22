@@ -102,8 +102,17 @@ function MissionsParStatus({ status, title }) {
             </p>
 
             {m.status?.toLowerCase() === "approuvée" && (
+            <div>
              <button onClick={() => generateePdf(m)} >Voir l'ordre de mission</button>
-)}
+             
+             <p>
+              <strong>Progression :</strong>{" "}
+              <span style={{color: m.progression === "Terminée" ? "green" : "orange",fontWeight: "bold",}}>
+              {m.progression}
+              </span>
+            </p>
+            </div>
+          )}
 
           </li>
         ))}
