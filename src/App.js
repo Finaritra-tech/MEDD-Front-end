@@ -14,7 +14,7 @@ import MissionsEnAttente from './composants/Missions/MissionsEnAttente';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import AgentsEnCours from './composants/Missions/agentEnCours';
 import TotalMissions from './composants/Missions/TotalMission';
-
+import MissionsParDirection from './composants/Missions/missionsParDirection';
 
 function App() {
   return (
@@ -37,7 +37,7 @@ function App() {
           <Route path="/missions/en-attente" element={<MissionsEnAttente />} />
           <Route path="/agentEnCours" element={<AgentsEnCours/>} />
           <Route path="/totalMissions" element={<TotalMissions/>} />
-
+          <Route path="/missions/par-direction" element={<MissionsParDirection/>} />
         </Routes>
       </div>
     </Router>
