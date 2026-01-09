@@ -15,31 +15,102 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import AgentsEnCours from './composants/Missions/agentEnCours';
 import TotalMissions from './composants/Missions/TotalMission';
 import MissionsParDirection from './composants/Missions/missionsParDirection';
+import MainLayout from './composants/MainLayout';
 
 function App() {
   return (
-     <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/add-agent" element={<AddAgent />} />
-          {/* chef */}
-          <Route path="/Direction/dashboard-chef" element={<DashboardChef/>} />
-          {/* Agent */}
-          <Route path="/Agents/dashboard-agent" element={<DashboardAgent/>} />
-          <Route path="/Missions/classique" element={<Classique />} />
-          <Route path="/Missions/direct" element={<Direct />} />
-          <Route path="/Agents/Mission" element={<Missions />} />
-          <Route path="/missions/destinataire" element={<Missions_destinataire />} />
-          <Route path="/missions/:id/edit" element={<EditMission />} />
-          <Route path="/missions/approuvees" element={<MissionsApprouvees />} />
-          <Route path="/missions/rejetees" element={<MissionsRejetees />} />
-          <Route path="/missions/en-attente" element={<MissionsEnAttente />} />
-          <Route path="/agentEnCours" element={<AgentsEnCours/>} />
-          <Route path="/totalMissions" element={<TotalMissions/>} />
-          <Route path="/missions/par-direction" element={<MissionsParDirection/>} />
-        </Routes>
-      </div>
+    <Router>
+      <Routes>
+
+        {/* Login sans header/sidebar */}
+        <Route path="/" element={<Login />} />
+
+        {/* Pages avec header + sidebar */}
+        <Route path="/add-agent" element={
+          <MainLayout>
+            <AddAgent />
+          </MainLayout>
+        } />
+
+        <Route path="/Direction/dashboard-chef" element={
+          <MainLayout>
+            <DashboardChef />
+          </MainLayout>
+        } />
+
+        <Route path="/Agents/dashboard-agent" element={
+          <MainLayout>
+            <DashboardAgent />
+          </MainLayout>
+        } />
+
+        <Route path="/Missions/classique" element={
+          <MainLayout>
+            <Classique />
+          </MainLayout>
+        } />
+
+        <Route path="/Missions/direct" element={
+          <MainLayout>
+            <Direct />
+          </MainLayout>
+        } />
+
+        <Route path="/Agents/Mission" element={
+          <MainLayout>
+            <Missions />
+          </MainLayout>
+        } />
+
+        <Route path="/missions/destinataire" element={
+          <MainLayout>
+            <Missions_destinataire />
+          </MainLayout>
+        } />
+
+        <Route path="/missions/:id/edit" element={
+          <MainLayout>
+            <EditMission />
+          </MainLayout>
+        } />
+
+        <Route path="/missions/approuvees" element={
+          <MainLayout>
+            <MissionsApprouvees />
+          </MainLayout>
+        } />
+
+        <Route path="/missions/rejetees" element={
+          <MainLayout>
+            <MissionsRejetees />
+          </MainLayout>
+        } />
+
+        <Route path="/missions/en-attente" element={
+          <MainLayout>
+            <MissionsEnAttente />
+          </MainLayout>
+        } />
+
+        <Route path="/agentEnCours" element={
+          <MainLayout>
+            <AgentsEnCours />
+          </MainLayout>
+        } />
+
+        <Route path="/totalMissions" element={
+          <MainLayout>
+            <TotalMissions />
+          </MainLayout>
+        } />
+
+        <Route path="/missions/par-direction" element={
+          <MainLayout>
+            <MissionsParDirection />
+          </MainLayout>
+        } />
+
+      </Routes>
     </Router>
   );
 }
