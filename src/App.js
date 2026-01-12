@@ -8,13 +8,11 @@ import Login from './composants/login';
 import Missions from './composants/Agents/Missions';
 import EditMission from './composants/Agents/EditMission';
 import Missions_destinataire from './composants/Direction/mission_destinataire';
-import MissionsApprouvees from './composants/Missions/MissionsApprouvées';
-import MissionsRejetees from './composants/Missions/MissionsRejetees';
-import MissionsEnAttente from './composants/Missions/MissionsEnAttente';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import AgentsEnCours from './composants/Missions/agentEnCours';
 import TotalMissions from './composants/Missions/TotalMission';
 import MissionsParDirection from './composants/Missions/missionsParDirection';
+import MissionsFilter from './composants/Missions/MissionsFilter';
 import MainLayout from './composants/MainLayout';
 
 function App() {
@@ -74,23 +72,9 @@ function App() {
           </MainLayout>
         } />
 
-        <Route path="/missions/approuvees" element={
-          <MainLayout>
-            <MissionsApprouvees />
-          </MainLayout>
-        } />
+      
 
-        <Route path="/missions/rejetees" element={
-          <MainLayout>
-            <MissionsRejetees />
-          </MainLayout>
-        } />
-
-        <Route path="/missions/en-attente" element={
-          <MainLayout>
-            <MissionsEnAttente />
-          </MainLayout>
-        } />
+      
 
         <Route path="/agentEnCours" element={
           <MainLayout>
@@ -107,6 +91,12 @@ function App() {
         <Route path="/missions/par-direction" element={
           <MainLayout>
             <MissionsParDirection />
+          </MainLayout>
+        } />
+
+        <Route path="/tri" element={
+          <MainLayout>
+            < MissionsFilter/>
           </MainLayout>
         } />
 

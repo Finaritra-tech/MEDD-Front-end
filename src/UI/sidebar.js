@@ -50,11 +50,10 @@ export default function Sidebar() {
 
         {/* Navigation */}
         <nav className="flex flex-col gap-4">
-          <SidebarItem icon={<HomeIcon />} label="Accueil" to="" />
+          <SidebarItem icon={<ChartIcon />} label="Tableau de bord" to="/Direction/dashboard-chef" />
+          <SidebarItem icon={<BriefcaseIcon />} label="Assigner" to="/Missions/direct" />
+          <SidebarItem icon={<UsersIcon />} label="Missions" to="/tri" />
           <SidebarItem icon={<UsersIcon />} label="Agents" to="/add-agent" />
-          <SidebarItem icon={<BriefcaseIcon />} label="Missions" />
-          <SidebarItem icon={<ChartIcon />} label="Statistiques" />
-          <SidebarItem icon={<SettingsIcon />} label="Paramètres" />
         </nav>
       </aside>
     </>

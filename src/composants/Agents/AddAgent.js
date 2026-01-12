@@ -1,5 +1,8 @@
 import { useState } from "react";
 import api from "../axiosConfig";
+import Input from'../../UI/input';
+import Button from '../../UI/button';
+
 
 function AddAgent() {
   const [form, setForm] = useState({
@@ -61,18 +64,20 @@ function AddAgent() {
   };
 
   return (
-    <div style={{ maxWidth: "600px", margin: "auto" }}>
+    <div className=" flex flex-col items-center justify-center">
+
+      <div>
       <h2>Ajouter un agent</h2>
 
       <form onSubmit={handleSubmit}>
         
  
-        <input type="text" name="nom" placeholder="Nom" onChange={handleChange} required />
-        <input type="text" name="fonction" placeholder="Fonction" onChange={handleChange} required />
-        <input type="text" name="telephone" placeholder="+261 32 05 558 78" onChange={handleChange} required />
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-        <input type="password" name="password" placeholder="Mot de passe" value={form.password} onChange={handleChange} required />
-        <input type="password" name="confirmMdp" placeholder="Confirmer le mot de passe" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required/>
+        <Input type="text" name="nom" placeholder="Nom" onChange={handleChange} required />
+        <Input type="text" name="fonction" placeholder="Fonction" onChange={handleChange} required />
+        <Input type="text" name="telephone" placeholder="+261 32 05 558 78" onChange={handleChange} required />
+        <Input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+        <Input type="password" name="password" placeholder="Mot de passe" value={form.password} onChange={handleChange} required />
+        <Input type="password" name="confirmMdp" placeholder="Confirmer le mot de passe" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required/>
 
         <select name="direction" onChange={handleChange}>
           <option value="DCSI">DCSI</option>
@@ -87,7 +92,7 @@ function AddAgent() {
 
 
 
-        <input type="file" accept="image/*" onChange={handlePhoto} />
+        <Input type="file" accept="image/*" onChange={handlePhoto} />
 
         {preview && (
           <div>
@@ -96,8 +101,10 @@ function AddAgent() {
           </div>
         )}
         {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Enregistrer</button>
+        <Button type="submit">Enregistrer</Button>
       </form>
+      </div>
+      
     </div>
   );
 }

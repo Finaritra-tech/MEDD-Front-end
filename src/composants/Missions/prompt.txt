@@ -1,0 +1,30 @@
+Modifier ce composant avec la scénario suivante : si c'est en attentechaque éléments de la liste des missions en attente doit comporter ces éléments additionnel : 
+   <button onClick={() => handleDelete(m.id)} style={{ marginRight: "10px" }}>Supprimer</button>
+            <button onClick={() => updateStatus(m.id, "approuver")} disabled={m.status !== "En attente"}>Approuver</button>
+            <button onClick={() => setRejectingId(m.id)} disabled={m.status !== "En attente"}>Rejeter</button>
+            {rejectingId === m.id && (
+   <div>
+    <textarea
+      placeholder="Motif du rejet (optionnel)"
+      value={motifRejet}
+      onChange={(e) => setMotifRejet(e.target.value)}
+      rows={3}
+      style={{ width: "100%", marginBottom: "5px" }}
+    />
+
+    <button
+      onClick={() => rejectMission(m.id)}
+      style={{ marginRight: "10px" }}
+    >
+      Confirmer le rejet
+    </button>
+
+    <button
+      onClick={() => {
+        setRejectingId(null);
+        setMotifRejet("");
+      }}
+    >
+      Annuler
+    </button>
+  </div>

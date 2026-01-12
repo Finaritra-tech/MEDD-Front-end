@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import api from "../axiosConfig";
 import { PieChart, Pie, Cell } from 'recharts';
+import Pagination from '../../UI/pagination';
 
 const COLORS = ["#4ade80", "#e5e7eb"];
 
 
 
-function AgentsEnCours({ searchTerm }) {
+function AgentsEnCours({ searchTerm}) {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  
 
   useEffect(() => {
     api.get('/agents-en-cours/')
@@ -44,12 +50,16 @@ function AgentsEnCours({ searchTerm }) {
       mission.objet.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
+  const totalPages = Math.ceil(filteredAgents.length / itemsPerPage);
 
+  const start = (currentPage - 1) * itemsPerPage;
+  const paginatedAgents = filteredAgents.slice(start, start + itemsPerPage);
 
   return (
     <div>
+    <div>
       <div className="flex flex-col gap-4">
-        {filteredAgents.map(agent => (
+        {paginatedAgents.map(agent => (
           <div
   key={agent.id}
   className="
@@ -91,6 +101,7 @@ function AgentsEnCours({ searchTerm }) {
           { name: 'Remaining', value: 100 - progress },
         ];
         return (
+         
           <li
             key={mission.id}
             className="flex items-center gap-3 bg-[#F0F0F0] rounded-lg p-2 shadow-inner"
@@ -126,6 +137,12 @@ function AgentsEnCours({ searchTerm }) {
         ))}
       </div>
     </div>
+    <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
+      </div>
   );
 }
 

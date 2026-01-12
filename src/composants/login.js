@@ -90,7 +90,7 @@ function Login() {
 
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
-        <Button type="submit" className="w-full">Se connecter</Button>
+        <Button type="submit" className="">Se connecter</Button>
       </form>
     </div>
   </div>

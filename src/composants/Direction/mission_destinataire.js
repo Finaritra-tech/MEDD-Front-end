@@ -137,7 +137,7 @@ function Missions_destinataire() {
             <button onClick={() => updateStatus(m.id, "approuver")} disabled={m.status !== "En attente"}>Approuver</button>
             <button onClick={() => setRejectingId(m.id)} disabled={m.status !== "En attente"}>Rejeter</button>
             {rejectingId === m.id && (
-   <div style={{ marginTop: "10px" }}>
+   <div>
     <textarea
       placeholder="Motif du rejet (optionnel)"
       value={motifRejet}
