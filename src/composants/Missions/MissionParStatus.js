@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import api from "../axiosConfig";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../UI/pagination";
+import Button from "../../UI/button";
+
 
 function MissionsParStatus({ status, title }) {
   const [missions, setMissions] = useState([]);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const [rejectingId, setRejectingId] = useState(null);
+  const [motifRejet, setMotifRejet] = useState("");
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
@@ -36,7 +40,6 @@ function MissionsParStatus({ status, title }) {
 const filtered = res.data.filter(
   (m) => normalize(m.status) === normalize(status)
 );
-
 
 
 setMissions(filtered);
@@ -93,6 +96,91 @@ setMissions(filtered);
   }
 };
 
+const fetchMissionsDestinataire = async () => {
+    if (!user) return;
+
+    try {
+      const res = await api.get("missions/?type=destinataire/", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      });
+      setMissions(res.data);
+    } catch (error) {
+      console.error("Erreur récupération missions :", error);
+    }
+  };
+const handleDelete = async (id) => {
+    if (window.confirm("Voulez-vous vraiment supprimer cette mission ?")) {
+      try {
+        await api.delete(`missions/${id}/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        });
+        fetchMissionsDestinataire(); // rafraîchir la liste après suppression
+      } catch (error) {
+        console.error("Erreur suppression :", error);
+      }
+    }
+  };
+
+const updateStatus = async (missionId, action, motif = "") => {
+  try {
+    await api.post(
+      `missions/${missionId}/${action}/`,
+      action === "rejeter" ? { motif_rejet: motif } : {},
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      }
+    );
+
+    fetchMissionsDestinataire();
+  } catch (error) {
+    console.error("Erreur mise à jour statut :", error);
+  }
+};
+const rejectMission = async (missionId) => {
+    try {
+      await api.post(
+        `missions/${missionId}/rejeter/`,
+        { motif_rejet: motifRejet },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+
+      setRejectingId(null);
+      setMotifRejet("");
+      fetchMissionsDestinataire();
+    } catch (error) {
+      console.error("Erreur rejet mission :", error);
+    }
+};
+  const generateMissionPdf = async (missionId) => {
+  try {
+    const response = await api.get(`missions/${missionId}/pdf/`, {
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    });
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `mission_${missionId}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+  } catch (error) {
+    console.error("Erreur génération PDF :", error);
+  }
+};
+
 
   return (
     <div>
@@ -104,63 +192,120 @@ setMissions(filtered);
   )}
 
   <ul className="flex flex-col gap-4">
-    {filtere.map((m) => (
+  {filtere.map((m) => {
+    const isPending = m.status?.toLowerCase() === "en attente";
+
+    return (
       <li
         key={m.id}
-        className="bg-[#EAEAEA] rounded-2xl p-4 shadow-[6px_6px_10px_#c5c5c5,-6px_-6px_10px_#ffffff] hover:shadow-[8px_8px_15px_#c5c5c5,-8px_-8px_15px_#ffffff] transition"
+        className="bg-[#EAEAEA] rounded-2xl p-4
+                   shadow-[6px_6px_10px_#c5c5c5,-6px_-6px_10px_#ffffff]
+                   transition"
       >
-        <div className="flex justify-between items-start flex-wrap gap-2">
-          {/* Infos mission */}
-          <div className="flex-1">
-            <p className="text-gray-800 font-semibold mb-1">
+        {/* ===== INFOS ===== */}
+        <div className="flex justify-between items-start gap-3">
+          <div>
+            <p className="text-lg font-semibold text-gray-800">
               {m.objet}
             </p>
-            <p className="text-gray-600 text-sm">
-              <strong>Lieu :</strong> {m.lieu} <br />
-              <strong>Date :</strong> {m.date_depart} → {m.date_retour} <br />
+
+            <p className="text-sm text-gray-600">
+              <strong>Lieu :</strong> {m.lieu}<br />
+              <strong>Date :</strong> {m.date_depart} → {m.date_retour}<br />
               <strong>Créée par :</strong> {m.cree_par_nom || "Inconnu"}
             </p>
           </div>
 
-          {/* Statut */}
+          {/* ===== BADGE STATUS ===== */}
           <span
-            className={`px-3 py-1 rounded-full text-xs font-bold ${
-              m.status?.toLowerCase() === "approuvée"
-                ? "bg-emerald-500 text-white"
-                : m.status?.toLowerCase() === "en attente"
-                ? "bg-amber-500 text-white"
-                : "bg-rose-500 text-white"
-            }`}
+            className={`px-3 py-1 rounded-full text-xs font-bold
+              ${
+                isPending
+                  ? "bg-amber-500 text-white"
+                  : m.status?.toLowerCase() === "approuvée"
+                  ? "bg-emerald-500 text-white"
+                  : "bg-rose-500 text-white"
+              }
+            `}
           >
             {m.status}
           </span>
+           <button onClick={() => generateMissionPdf(m.id)}>Voir détails (PDF)</button>   
         </div>
 
-        {/* Progression et bouton PDF si approuvée */}
-        {m.status?.toLowerCase() === "approuvée" && (
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-            <button
-              onClick={() => generateePdf(m)}
-              className="px-4 py-2 rounded-xl bg-emerald-500 shadow-[6px_6px_10px_#c5c5c5,-6px_-6px_10px_#ffffff] hover:shadow-[8px_8px_12px_#c5c5c5,-8px_-8px_12px_#ffffff] transition font-medium text-white"
-            >
-              Voir l'ordre de mission
-            </button>
+        {/* ===== ACTIONS POUR EN ATTENTE ===== */}
+        {isPending && (
+          <div className="mt-4 flex flex-col gap-3">
 
-            <p className="text-sm font-semibold">
-              <strong>Progression :</strong>{" "}
-              <span
-                className={`font-bold ${
-                  m.progression === "Terminée" ? "text-green-600" : "text-orange-500"
-                }`}
+            {/* Boutons principaux */}
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => handleDelete(m.id)}
+                className="px-4 py-2 rounded-xl text-sm font-medium
+                           bg-rose-500 text-white
+                           shadow hover:opacity-90 transition"
               >
-                {m.progression}
-              </span>
-            </p>
+                Supprimer
+              </button>
+
+              <button
+                onClick={() => updateStatus(m.id, "approuver")}
+                className="px-4 py-2 rounded-xl text-sm font-medium
+                           bg-emerald-500 text-white
+                           shadow hover:opacity-90 transition"
+              >
+                Approuver
+              </button>
+
+              <button
+                onClick={() => setRejectingId(m.id)}
+                className="px-4 py-2 rounded-xl text-sm font-medium
+                           bg-amber-500 text-white
+                           shadow hover:opacity-90 transition"
+              >
+                Rejeter
+              </button>
+            </div>
+
+            {/* Zone rejet */}
+            {rejectingId === m.id && (
+              <div className="bg-[#EAEAEA] rounded-xl p-3
+                              shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]">
+
+                <textarea
+                  placeholder="Motif du rejet (optionnel)"
+                  value={motifRejet}
+                  onChange={(e) => setMotifRejet(e.target.value)}
+                  rows={3}
+                  className="w-full p-2 rounded-lg bg-[#EAEAEA]
+                             shadow-[inset_2px_2px_4px_#c5c5c5,inset_-2px_-2px_4px_#ffffff]
+                             mb-3 text-sm"
+                />
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => rejectMission(m.id)}
+                    className="px-4 py-2 rounded-xl text-sm font-medium
+                               bg-rose-600 text-white hover:opacity-90"
+                  >
+                    Confirmer le rejet
+                  </button>
+
+                  <button onClick={() => {setRejectingId(null);
+                                             setMotifRejet("");
+                    }}
+                    className="px-4 py-2 rounded-xl text-sm font-medium
+                               bg-gray-300 text-gray-700 hover:bg-gray-400">Annuler</button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </li>
-    ))}
+    );
+  })}
   </ul>
+
    </div>
 
      <Pagination
