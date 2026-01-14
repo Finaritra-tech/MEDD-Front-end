@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../axiosConfig";
+import Button from "../../UI/button";
+import Input from "../../UI/input";
+import { FaClipboardList, FaSave, FaPrint } from "react-icons/fa";
 
 function Classique() {
   const [agents, setAgents] = useState([]);
@@ -124,84 +127,139 @@ useEffect(() => {
   };
 
   return (
-    <div style={{ maxWidth: "650px", margin: "auto" }}>
-      <h2>Créer une mission</h2>
 
-      <form onSubmit={handleSubmit}>
-        <select name="agent" onChange={handleChange} value={form.agent} required>
-          <option value="">-- Sélectionner l'agent concerné --</option>
-          {agents.map((a) => (
-            <option key={a.id} value={a.id}>
-              {a.nom} ({a.fonction})
-            </option>
-          ))}
-        </select>
+<div className="max-w-3xl mx-auto p-6 bg-[#EAEAEA] rounded-[30px_10px_30px_10px] shadow-[8px_8px_16px_#c5c5c5,-8px_-8px_16px_#ffffff]">
+<h2 className="text-2xl font-bold mb-6 text-gray-700 text-center flex items-center justify-center gap-2">
+  <FaClipboardList className="text-gray-500" />
+  Créer une mission
+</h2>
 
-        {user && (
-            <p style={{ background: "#eee", padding: "10px", borderRadius: "6px" }}>
-            <input type="text" value={form.cree_par} readOnly hidden />
-            Créée par :<input type="text" value={form.cree_par_nom} readOnly  />
-          </p>
-        )}
+  <form onSubmit={handleSubmit} className="space-y-6">
+    {/* ===== GRID 2 COLONNES ===== */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {/* Agent */}
+      <select
+        name="agent"
+        onChange={handleChange}
+        value={form.agent}
+        required
+        className="rounded-2xl bg-[#EAEAEA] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] text-gray-700"
+      >
+        <option value="">-- Sélectionner l'agent --</option>
+        {agents.map((a) => (
+          <option key={a.id} value={a.id}>
+            {a.nom} ({a.fonction})
+          </option>
+        ))}
+      </select>
 
-        <input
-          type="text"
-          name="objet"
-          placeholder="Objet de la mission"
-          value={form.objet}
-          onChange={handleChange}
-          required
-        />
+      {/* Créée par */}
+      {user && (
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-600 ">Créée par</label>
+          <Input
+            type="text"
+            value={form.cree_par_nom}
+            readOnly
+          />
+          <Input type="text" value={form.cree_par} readOnly hidden />
+        </div>
+      )}
+    </div>
 
-        <input
-          type="text"
-          name="lieu"
-          placeholder="Lieu"
-          value={form.lieu}
-          onChange={handleChange}
-          required
-        />
+    {/* Objet et Lieu */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <Input
+        type="text"
+        name="objet"
+        placeholder="Objet de la mission"
+        value={form.objet}
+        onChange={handleChange}
+        required
+      />
 
-        <label>Date de départ :</label>
-        <input
+      <Input
+        type="text"
+        name="lieu"
+        placeholder="Lieu"
+        value={form.lieu}
+        onChange={handleChange}
+        required
+      />
+    </div>
+
+    {/* Dates */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="flex flex-col">
+        <label className="text-sm text-gray-600">Date de départ</label>
+        <Input
           type="date"
           name="date_depart"
           value={form.date_depart}
           onChange={handleChange}
           required
         />
+      </div>
 
-        <label>Date de retour :</label>
-        <input
+      <div className="flex flex-col">
+        <label className="text-sm text-gray-600 ">Date de retour</label>
+        <Input
           type="date"
           name="date_retour"
           value={form.date_retour}
           onChange={handleChange}
           required
         />
-
-        {nbrJours > 0 && <p><strong>Nombre de jours estimé :</strong> {nbrJours}</p>}
-
-        <select name="status" onChange={handleChange} value={form.status} disabled>
-          <option value="En attente">En attente</option>
-          <option value="Approuvée">Approuvée</option>
-          <option value="Rejetée">Rejetée</option>
-        </select>
-
-        <textarea
-          name="description"
-          placeholder="Description (optionnel)"
-          value={form.description}
-          onChange={handleChange}
-        />
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
-        <button type="submit">Enregistrer</button>
-      </form>
-
-      <button onClick={generatePdf}>Générer PDF</button>
+      </div>
     </div>
+
+    {nbrJours > 0 && (
+      <p className="text-sm font-semibold text-gray-600 text-center">
+        Nombre de jours estimé : {nbrJours}
+      </p>
+    )}
+
+    {/* Status */}
+    <select
+      name="status"
+      onChange={handleChange}
+      value={form.status}
+      disabled
+    >
+      <option value="En attente">En attente</option>
+      <option value="Approuvée">Approuvée</option>
+      <option value="Rejetée">Rejetée</option>
+    </select>
+
+    {/* Description */}
+    <textarea
+      name="description"
+      placeholder="Description (optionnel)"
+      value={form.description}
+      onChange={handleChange}
+      className="w-full min-h-[50px] p-3 rounded-xl bg-[#EAEAEA] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] text-gray-700"
+    />
+
+    {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
+    {/* Buttons */}
+    <div className="flex flex-wrap justify-center gap-4">
+      <Button
+        type="submit"
+        className="bg-[#EAEAEA] text-gray-700 shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] hover:shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] transition-all">
+          Enregistrer <FaSave className="inline-block ml-2" />
+      </Button>
+
+      <Button
+        type="button"
+        onClick={generatePdf}
+        className="bg-[#EAEAEA] text-gray-700 shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] hover:shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] transition-all"
+      >
+        Générer PDF <FaPrint className="inline-block ml-2" />
+      </Button>
+    </div>
+  </form>
+</div>
   );
 }
 

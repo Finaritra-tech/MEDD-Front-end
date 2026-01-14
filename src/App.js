@@ -14,6 +14,8 @@ import TotalMissions from './composants/Missions/TotalMission';
 import MissionsParDirection from './composants/Missions/missionsParDirection';
 import MissionsFilter from './composants/Missions/MissionsFilter';
 import MainLayout from './composants/MainLayout';
+import UserLayout from './composants/UserLayout';
+
 
 function App() {
   return (
@@ -36,17 +38,6 @@ function App() {
           </MainLayout>
         } />
 
-        <Route path="/Agents/dashboard-agent" element={
-          <MainLayout>
-            <DashboardAgent />
-          </MainLayout>
-        } />
-
-        <Route path="/Missions/classique" element={
-          <MainLayout>
-            <Classique />
-          </MainLayout>
-        } />
 
         <Route path="/Missions/direct" element={
           <MainLayout>
@@ -54,27 +45,12 @@ function App() {
           </MainLayout>
         } />
 
-        <Route path="/Agents/Mission" element={
-          <MainLayout>
-            <Missions />
-          </MainLayout>
-        } />
 
         <Route path="/missions/destinataire" element={
           <MainLayout>
             <Missions_destinataire />
           </MainLayout>
         } />
-
-        <Route path="/missions/:id/edit" element={
-          <MainLayout>
-            <EditMission />
-          </MainLayout>
-        } />
-
-      
-
-      
 
         <Route path="/agentEnCours" element={
           <MainLayout>
@@ -98,6 +74,28 @@ function App() {
           <MainLayout>
             < MissionsFilter/>
           </MainLayout>
+        } />
+
+        <Route path="/Agents/dashboard-agent" element={
+          <UserLayout>
+        <DashboardAgent />
+        </UserLayout>
+        } />
+
+        <Route path="/Missions/classique" element={
+          <UserLayout>
+            <Classique />
+            </UserLayout>
+        } />
+         <Route path="/missions/:id/edit" element={
+          <UserLayout>
+            <EditMission />    
+          </UserLayout>     
+        } />
+        <Route path="/Agents/Mission" element={
+          <UserLayout>
+            <Missions />
+            </UserLayout>
         } />
 
       </Routes>
