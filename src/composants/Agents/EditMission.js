@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../axiosConfig"; // ton axios configuré
+import { FaSave } from "react-icons/fa";
 
 function EditMission() {
   const { id } = useParams(); // Récupère l'id de la mission depuis l'URL
@@ -43,27 +44,45 @@ function EditMission() {
   if (!mission) return <p>Chargement de la mission...</p>;
 
   return (
-    <div style={{ maxWidth: "600px", margin: "auto" }}>
-      <h2>Modifier la mission</h2>
+ <div className="max-w-md mx-auto p-6 rounded-[30px_10px_30px_10px] 
+                bg-[#EAEAEA] shadow-[8px_8px_16px_#c5c5c5,-8px_-8px_16px_#ffffff]">
+  <h2 className="text-2xl font-bold mb-6 text-gray-700 text-center flex items-center justify-center gap-2">
+    <FaSave className="text-gray-700" /> Modifier la mission
+  </h2>
 
-      <form onSubmit={handleSubmit}>
-        <label>Choisir un destinataire :</label>
-        <select
-          value={selectedResponsable}
-          onChange={(e) => setSelectedResponsable(e.target.value)}
-          style={{ width: "100%", padding: "8px", marginBottom: "15px" }}
-        >
-          <option value="">— Aucun pour l'instant —</option>
-          {responsables.map(r => (
-            <option key={r.id} value={r.id}>
-              {r.nom} — {r.fonction}
-            </option>
-          ))}
-        </select>
-
-        <button type="submit" style={{ padding: "8px 12px" }}>Enregistrer</button>
-      </form>
+  <form onSubmit={handleSubmit} className="space-y-4">
+    {/* Destinataire */}
+    <div className="flex flex-col">
+      <label className="text-gray-600 mb-2">Choisir un destinataire :</label>
+      <select
+        value={selectedResponsable}
+        onChange={(e) => setSelectedResponsable(e.target.value)}
+        className="p-3 rounded-xl bg-[#EAEAEA] 
+                   shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]
+                   focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all"
+      >
+        <option value="">Aucun pour l'instant</option>
+        {responsables.map((r) => (
+          <option key={r.id} value={r.id}>
+            {r.nom} — {r.fonction}
+          </option>
+        ))}
+      </select>
     </div>
+
+    {/* Bouton */}
+    <button
+      type="submit"
+      className="flex items-center justify-center gap-2 w-full 
+                 bg-blue-400 text-gray-700 
+                 shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] 
+                 hover:shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] 
+                 transition-all px-4 py-2 rounded-xl font-medium"
+    >
+      <FaSave /> Enregistrer
+    </button>
+  </form>
+</div>
   );
 }
 

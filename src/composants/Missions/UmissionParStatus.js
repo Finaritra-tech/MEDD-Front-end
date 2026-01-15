@@ -49,7 +49,7 @@ setMissions(filtered);
   };
   
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 3;
   const totalPages = Math.ceil(missions.length / itemsPerPage);
   const start = (currentPage - 1) * itemsPerPage;
   const filtere = missions.slice(start, start + itemsPerPage);

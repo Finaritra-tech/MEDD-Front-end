@@ -143,7 +143,9 @@ useEffect(() => {
         onChange={handleChange}
         value={form.agent}
         required
-        className="rounded-2xl bg-[#EAEAEA] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] text-gray-700"
+        className="p-3 rounded-xl bg-[#EAEAEA] 
+                   shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]
+                   focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all"
       >
         <option value="">-- Sélectionner l'agent --</option>
         {agents.map((a) => (
@@ -224,6 +226,9 @@ useEffect(() => {
       name="status"
       onChange={handleChange}
       value={form.status}
+         className="p-3 rounded-xl bg-[#EAEAEA] 
+                   shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]
+                   focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all"
       disabled
     >
       <option value="En attente">En attente</option>

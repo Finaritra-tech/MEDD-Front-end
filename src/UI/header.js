@@ -1,6 +1,7 @@
 // src/components/Header.jsx
 import React from "react";
 import { useEffect, useState } from "react";
+import {FaUser} from 'react-icons/fa';
 
 
 export default function Header({ onSearch }) {
@@ -60,7 +61,7 @@ export default function Header({ onSearch }) {
 
       {/* Nom utilisateur */}
       <div className="text-gray-800 font-semibold text-lg whitespace-nowrap">
-        {user.nom}
+       <FaUser className="inline-block ml-2" /> {user.nom} 
       </div>
     </header>
   );

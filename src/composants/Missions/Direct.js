@@ -7,6 +7,15 @@ import Title from "../../UI/title";
 function Direct() {
   const [agents, setAgents] = useState([]);
   const [user, setUser] = useState(null);
+  const [agentsDisponibles, setAgentsDisponibles] = useState([]);
+
+useEffect(() => {
+  api.get("agents/").then((res) => {
+    const disponibles = res.data.filter(agent => !agent.missions_en_cours || agent.missions_en_cours.length === 0);
+    setAgentsDisponibles(disponibles);
+  }).catch((err) => console.error(err));
+}, []);
+
 
   const [form, setForm] = useState({
     agent: "",
@@ -21,7 +30,16 @@ function Direct() {
     destinatairee:""
 
   });
+ const getTomorrow = () => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 2);
+  const yyyy = tomorrow.getFullYear();
+  const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+  const dd = String(tomorrow.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+};
 
+const tomorrowDate = getTomorrow();
   const [error, setError] = useState("");
   const [nbrJours, setNbrJours] = useState(0);
 
@@ -146,22 +164,14 @@ useEffect(() => {
 
         {/* Agent + Créateur */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-          <select
-            name="agent"
-            onChange={handleChange}
-            value={form.agent}
-            required
-            className="w-full p-3 rounded-xl bg-[#EAEAEA]
-                       shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]"
-          >
-            <option value="">-- Sélectionner l'agent concerné --</option>
-            {agents.map(a => (
-              <option key={a.id} value={a.id}>
-                {a.nom} ({a.fonction})
-              </option>
-            ))}
-          </select>
-
+          <select name="agent" onChange={handleChange} value={form.agent} required className="w-full p-3 rounded-xl bg-[#EAEAEA] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]">
+          <option value="">-- Sélectionner l'agent concerné --</option>
+  {agentsDisponibles.map(a => (
+    <option key={a.id} value={a.id}>
+      {a.nom} ({a.fonction})
+    </option>
+  ))}
+</select>
           {user && (
             <div className="flex flex-col">
               <label className="text-sm text-gray-600 mb-1">Créée par</label>
@@ -201,6 +211,7 @@ useEffect(() => {
               name="date_depart"
               value={form.date_depart}
               onChange={handleChange}
+              min={tomorrowDate}
               required
             />
           </div>
@@ -213,6 +224,7 @@ useEffect(() => {
               value={form.date_retour}
               onChange={handleChange}
               required
+              min={tomorrowDate}
             />
           </div>
         </div>
@@ -239,8 +251,9 @@ useEffect(() => {
           onChange={handleChange}
           value={form.destinatairee}
           required
-          className="w-full p-3 rounded-xl bg-[#EAEAEA]
-                     shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]"
+           className="p-3 rounded-xl bg-[#EAEAEA] 
+                   shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]
+                   focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all"
         >
           <option value="">-- Choisir le destinataire --</option>
           {agents.map(a => (

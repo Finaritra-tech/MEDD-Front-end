@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { logout } from "../composants/logout";
 
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
+
+   const handleLogout = () => {
+    logout(); // Supprime tokens côté client et appelle /logout/ si tu le souhaites
+    window.location.href = "/"; // Redirection après déconnexion
+  };
 
   return (
     <>
@@ -45,7 +51,7 @@ export default function Sidebar() {
       >
         {/* Logo */}
         <div className="flex items-center gap-3 mb-8">
-          <span className="font-bold text-lg text-gray-800">Dashboard</span>
+          <span className="font-bold text-lg text-gray-800">MEDD</span>
         </div>
 
         {/* Navigation */}
@@ -54,6 +60,16 @@ export default function Sidebar() {
           <SidebarItem icon={<BriefcaseIcon />} label="Assigner" to="/Missions/direct" />
           <SidebarItem icon={<UsersIcon />} label="Missions" to="/tri" />
           <SidebarItem icon={<UsersIcon />} label="Agents" to="/add-agent" />
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl
+                       bg-[#EAEAEA] text-gray-700 shadow-[6px_6px_10px_#c5c5c5,-6px_-6px_10px_#ffffff]
+                       hover:shadow-[8px_8px_12px_#c5c5c5,-8px_-8px_12px_#ffffff]
+                       font-medium"
+          >
+            <LogOut /> Déconnexion
+          </button>
+
         </nav>
       </aside>
     </>
@@ -120,5 +136,13 @@ function SettingsIcon() {
     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 6a6 6 0 100 12 6 6 0 000-12z" />
     </svg>
+  );
+}
+function LogOut(){
+  return (
+
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /> 
+  </svg>
   );
 }

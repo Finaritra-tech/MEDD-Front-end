@@ -13,48 +13,25 @@ function DashboardChef({ searchTerm }) {
         Tableau de bord
       </h2>
 
-<div className="grid grid-cols-1 lg:grid-cols-[65%,35%] gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-[35%,65%] gap-6">
+
+
+  <div className="flex flex-col gap-6 sticky top-40 self-start">
+    <div className="flex items-center justify-center">
+      <TotalMissions />
+    </div>
+    <div className="bg-[#EAEAEA] rounded-2xl p-6 shadow-[6px_6px_10px_#c5c5c5,-6px_-6px_10px_#ffffff] min-h-[200px]">
+      <MissionsParDirection />
+    </div>
+  </div>
 
   {/* Colonne gauche : scroll normale */}
-  <div
-    className="
-      bg-[#EAEAEA]
-      rounded-2xl
-      p-6
-      shadow-[6px_6px_10px_#c5c5c5,-6px_-6px_10px_#ffffff]
-    "
-  >
+  <div className="bg-[#EAEAEA] rounded-2xl p-6 shadow-[6px_6px_10px_#c5c5c5,-6px_-6px_10px_#ffffff]">
     <AgentsEnCours searchTerm={searchTerm} />
   </div>
 
   {/* Colonne droite : sticky */}
-  <div
-    className="
-      flex flex-col gap-6
-      sticky top-40
-      self-start
-    "
-  >
-    <div
-      className="
-     flex items-center justify-center
- 
-      "
-    >
-      <TotalMissions />
-    </div>
-
-    <div
-      className="
-        bg-[#EAEAEA]
-        rounded-2xl
-        p-6
-        shadow-[6px_6px_10px_#c5c5c5,-6px_-6px_10px_#ffffff]
-      "
-    >
-      <MissionsParDirection />
-    </div>
-  </div>
+  
 </div>
 
     </div>

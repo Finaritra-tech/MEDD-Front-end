@@ -110,8 +110,9 @@ function AddAgent() {
           <select
             name="direction"
             onChange={handleChange}
-            className="col-span-1 sm:col-span-2 p-3 rounded-xl bg-[#EAEAEA]
-                       shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]"
+              className="p-3 rounded-xl bg-[#EAEAEA] 
+                   shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]
+                   focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all"
           >
             <option value="">-- Sélectionner la direction --</option>
             <option value="DCSI">DCSI</option>

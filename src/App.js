@@ -15,16 +15,19 @@ import MissionsParDirection from './composants/Missions/missionsParDirection';
 import MissionsFilter from './composants/Missions/MissionsFilter';
 import MainLayout from './composants/MainLayout';
 import UserLayout from './composants/UserLayout';
+import PrivateRoute from "./privateRoute";
 
 
 function App() {
   return (
     <Router>
       <Routes>
-
+   
         {/* Login sans header/sidebar */}
         <Route path="/" element={<Login />} />
 
+
+     <Route element={<PrivateRoute />}>
         {/* Pages avec header + sidebar */}
         <Route path="/add-agent" element={
           <MainLayout>
@@ -97,7 +100,7 @@ function App() {
             <Missions />
             </UserLayout>
         } />
-
+        </Route>
       </Routes>
     </Router>
   );
