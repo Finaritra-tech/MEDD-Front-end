@@ -268,7 +268,6 @@ useEffect(() => {
         {/* Actions */}
         <div className="flex flex-wrap justify-center gap-4 pt-2">
           <Button type="submit">Envoyer</Button>
-          <a onClick={generateePdf}>Générer l'ordre de mission</a>
         </div>
       </form>
     </div>

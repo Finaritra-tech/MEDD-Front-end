@@ -16,6 +16,7 @@ import MissionsFilter from './composants/Missions/MissionsFilter';
 import MainLayout from './composants/MainLayout';
 import UserLayout from './composants/UserLayout';
 import PrivateRoute from "./privateRoute";
+import MissionsParMois from './composants/Missions/MissionsParMois';
 
 
 function App() {
@@ -76,6 +77,12 @@ function App() {
         <Route path="/tri" element={
           <MainLayout>
             < MissionsFilter/>
+          </MainLayout>
+        } />
+
+        <Route path="/MissionsParMois" element={
+          <MainLayout>
+            < MissionsParMois/>
           </MainLayout>
         } />
 

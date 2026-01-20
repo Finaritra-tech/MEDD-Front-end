@@ -254,14 +254,6 @@ useEffect(() => {
         className="bg-[#EAEAEA] text-gray-700 shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] hover:shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] transition-all">
           Enregistrer <FaSave className="inline-block ml-2" />
       </Button>
-
-      <Button
-        type="button"
-        onClick={generatePdf}
-        className="bg-[#EAEAEA] text-gray-700 shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] hover:shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] transition-all"
-      >
-        Générer PDF <FaPrint className="inline-block ml-2" />
-      </Button>
     </div>
   </form>
 </div>

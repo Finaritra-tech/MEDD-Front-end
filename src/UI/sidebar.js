@@ -57,9 +57,11 @@ export default function Sidebar() {
         {/* Navigation */}
         <nav className="flex flex-col gap-4">
           <SidebarItem icon={<ChartIcon />} label="Tableau de bord" to="/Direction/dashboard-chef" />
+          <SidebarItem icon={<SettingsIcon />} label="Historique" to="/MissionsParMois" />
           <SidebarItem icon={<BriefcaseIcon />} label="Assigner" to="/Missions/direct" />
-          <SidebarItem icon={<UsersIcon />} label="Missions" to="/tri" />
+          <SidebarItem icon={<UsersIcon />} label="Missions" to="/tri" />          
           <SidebarItem icon={<UsersIcon />} label="Agents" to="/add-agent" />
+          
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-3 rounded-xl
@@ -144,5 +146,13 @@ function LogOut(){
     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /> 
   </svg>
+  );
+}
+
+function HistoryIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
   );
 }

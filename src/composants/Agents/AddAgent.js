@@ -5,6 +5,7 @@ import Button from "../../UI/button";
 
 function AddAgent() {
   const [form, setForm] = useState({
+    matricule: "",
     nom: "",
     fonction: "",
     telephone: "",
@@ -75,7 +76,7 @@ function AddAgent() {
         <h2 className="text-2xl font-bold mb-6 text-gray-700">Ajouter un agent</h2>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
+          <Input type="text" name="matricule" placeholder="Matricule" onChange={handleChange} required />
           <Input type="text" name="nom" placeholder="Nom" onChange={handleChange} required />
           <Input type="text" name="fonction" placeholder="Fonction" onChange={handleChange} required />
 

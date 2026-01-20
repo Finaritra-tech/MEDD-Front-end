@@ -58,41 +58,38 @@ setMissions(filtered);
     fetchMissions();
   }, [user, status]);
 
-  const generateePdf = async (mission) => {
+const generateePdf = async (mission) => {
   try {
     const response = await api.post(
       "om-pdf/",
-      {
-        id: mission.id,
-        objet: mission.objet,
-        lieu: mission.lieu,
-        date_depart: mission.date_depart,
-        date_retour: mission.date_retour,
-        description: mission.description,
-        agent: mission.agent,
-        cree_par: mission.cree_par,
-        destinatairee: mission.destinatairee,
-      },
+      { id: mission.id },
       {
         responseType: "blob",
+        timeout: 30000, 
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access")}`,
         },
       }
     );
 
-    // Télécharger le PDF
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const file = new Blob([response.data], {
+      type: "application/pdf",
+    });
+
+    const url = window.URL.createObjectURL(file);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "ordre_mission.pdf");
+    link.download = "ordre_mission.pdf";
     document.body.appendChild(link);
     link.click();
     link.remove();
-
+    window.URL.revokeObjectURL(url);
 
   } catch (error) {
-    console.error("Erreur génération PDF :", error);
+    // ❗ Ignore les erreurs liées au stream PDF
+    if (error.code !== "ERR_NETWORK") {
+      console.error("Erreur génération PDF :", error);
+    }
   }
 };
 
@@ -183,127 +180,140 @@ const rejectMission = async (missionId) => {
 
 
   return (
-    <div>
-   <div className="max-w-4xl mx-auto p-4">
-  <h2 className="text-2xl font-bold text-gray-800 mb-6">{title}</h2>
+  <div>
+      <div className="max-w-4xl mx-auto p-4">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">{title}</h2>
 
-  {!filtere.length && (
-    <p className="text-gray-500 text-center">Aucune mission trouvée.</p>
-  )}
+      {!filtere.length && (
+       <p className="text-gray-500 text-center">Aucune mission trouvée.</p>
+      )}
 
-  <ul className="flex flex-col gap-4">
-  {filtere.map((m) => {
-    const isPending = m.status?.toLowerCase() === "en attente";
+      <ul className="flex flex-col gap-4">
+      {filtere.map((m) => {
+      const isPending = m.status?.toLowerCase() === "en attente";
+      const isApproved = m.status?.toLowerCase() === "approuvée";
 
-    return (
-      <li
-        key={m.id}
-        className="bg-[#EAEAEA] rounded-2xl p-4
-                   shadow-[6px_6px_10px_#c5c5c5,-6px_-6px_10px_#ffffff]
-                   transition"
-      >
-        {/* ===== INFOS ===== */}
-        <div className="flex justify-between items-start gap-3">
-          <div>
-            <p className="text-lg font-semibold text-gray-800">
-              {m.objet}
-            </p>
+   return (
+    <li
+      key={m.id}
+      className="bg-[#EAEAEA] rounded-2xl p-4
+                 shadow-[6px_6px_10px_#c5c5c5,-6px_-6px_10px_#ffffff]
+                 transition"
+    >
+      {/* ===== INFOS ===== */}
+      <div className="flex justify-between items-start gap-3">
+        <div>
+          <p className="text-lg font-semibold text-gray-800">
+            {m.objet}
+          </p>
 
-            <p className="text-sm text-gray-600">
-              <strong>Lieu :</strong> {m.lieu}<br />
-              <strong>Date :</strong> {m.date_depart} → {m.date_retour}<br />
-              <strong>Créée par :</strong> {m.cree_par_nom || "Inconnu"}
-            </p>
-          </div>
-
-          {/* ===== BADGE STATUS ===== */}
-          <span
-            className={`px-3 py-1 rounded-full text-xs font-bold
-              ${
-                isPending
-                  ? "bg-amber-500 text-white"
-                  : m.status?.toLowerCase() === "approuvée"
-                  ? "bg-emerald-500 text-white"
-                  : "bg-rose-500 text-white"
-              }
-            `}
-          >
-            {m.status}
-          </span>
-           <button onClick={() => generateMissionPdf(m.id)}>Voir détails (PDF)</button>   
+          <p className="text-sm text-gray-600">
+            <strong>Lieu :</strong> {m.lieu}<br />
+            <strong>Date :</strong> {m.date_depart} → {m.date_retour}<br />
+            <strong>Créée par :</strong> {m.cree_par_nom || "Inconnu"}
+          </p>
         </div>
 
-        {/* ===== ACTIONS POUR EN ATTENTE ===== */}
-        {isPending && (
-          <div className="mt-4 flex flex-col gap-3">
+        {/* ===== BADGE STATUS ===== */}
+        <span
+          className={`px-3 py-1 rounded-full text-xs font-bold
+            ${
+              isPending
+                ? "bg-amber-500 text-white"
+                : isApproved
+                ? "bg-emerald-500 text-white"
+                : "bg-rose-500 text-white"
+            }
+          `}
+        >
+          {m.status}
+        </span>  
+      </div>
 
-            {/* Boutons principaux */}
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => handleDelete(m.id)}
-                className="px-4 py-2 rounded-xl text-sm font-medium
-                           bg-rose-500 text-white
-                           shadow hover:opacity-90 transition"
-              >
-                Supprimer
-              </button>
+      {/* ===== ACTIONS POUR EN ATTENTE ===== */}
+      {isPending && (
+        <div className="mt-4 flex flex-col gap-3">
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => handleDelete(m.id)}
+              className="px-4 py-2 rounded-xl text-sm font-medium
+                         bg-rose-500 text-white
+                         shadow hover:opacity-90 transition"
+            >
+              Supprimer
+            </button>
 
-              <button
-                onClick={() => updateStatus(m.id, "approuver")}
-                className="px-4 py-2 rounded-xl text-sm font-medium
-                           bg-emerald-500 text-white
-                           shadow hover:opacity-90 transition"
-              >
-                Approuver
-              </button>
+            <button
+              onClick={() => updateStatus(m.id, "approuver")}
+              className="px-4 py-2 rounded-xl text-sm font-medium
+                         bg-emerald-500 text-white
+                         shadow hover:opacity-90 transition"
+            >
+              Approuver
+            </button>
 
-              <button
-                onClick={() => setRejectingId(m.id)}
-                className="px-4 py-2 rounded-xl text-sm font-medium
-                           bg-amber-500 text-white
-                           shadow hover:opacity-90 transition"
-              >
-                Rejeter
-              </button>
-            </div>
+            <button
+              onClick={() => setRejectingId(m.id)}
+              className="px-4 py-2 rounded-xl text-sm font-medium
+                         bg-amber-500 text-white
+                         shadow hover:opacity-90 transition"
+            >
+              Rejeter
+            </button>
 
-            {/* Zone rejet */}
-            {rejectingId === m.id && (
-              <div className="bg-[#EAEAEA] rounded-xl p-3
-                              shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]">
-
-                <textarea
-                  placeholder="Motif du rejet (optionnel)"
-                  value={motifRejet}
-                  onChange={(e) => setMotifRejet(e.target.value)}
-                  rows={3}
-                  className="w-full p-2 rounded-lg bg-[#EAEAEA]
-                             shadow-[inset_2px_2px_4px_#c5c5c5,inset_-2px_-2px_4px_#ffffff]
-                             mb-3 text-sm"
-                />
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => rejectMission(m.id)}
-                    className="px-4 py-2 rounded-xl text-sm font-medium
-                               bg-rose-600 text-white hover:opacity-90"
-                  >
-                    Confirmer le rejet
-                  </button>
-
-                  <button onClick={() => {setRejectingId(null);
-                                             setMotifRejet("");
-                    }}
-                    className="px-4 py-2 rounded-xl text-sm font-medium
-                               bg-gray-300 text-gray-700 hover:bg-gray-400">Annuler</button>
-                </div>
-              </div>
-            )}
+            <button onClick={() => generateMissionPdf(m.id)}  className="px-4 py-2 rounded-xl text-sm font-medium
+                       bg-blue-500 text-white shadow hover:opacity-90 transition">Voir la fiche de demande</button>   
           </div>
-        )}
-      </li>
-    );
-  })}
+
+          {rejectingId === m.id && (
+            <div className="bg-[#EAEAEA] rounded-xl p-3
+                            shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff]">
+
+              <textarea
+                placeholder="Motif du rejet (optionnel)"
+                value={motifRejet}
+                onChange={(e) => setMotifRejet(e.target.value)}
+                rows={3}
+                className="w-full p-2 rounded-lg bg-[#EAEAEA]
+                           shadow-[inset_2px_2px_4px_#c5c5c5,inset_-2px_-2px_4px_#ffffff]
+                           mb-3 text-sm"
+              />
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => rejectMission(m.id)}
+                  className="px-4 py-2 rounded-xl text-sm font-medium
+                             bg-rose-600 text-white hover:opacity-90"
+                >
+                  Confirmer le rejet
+                </button>
+
+                <button onClick={() => {setRejectingId(null); setMotifRejet("");}}
+                  className="px-4 py-2 rounded-xl text-sm font-medium
+                             bg-gray-300 text-gray-700 hover:bg-gray-400">
+                  Annuler
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ===== ACTION POUR LES MISSIONS APPROUVÉES ===== */}
+      {isApproved && (
+        <div className="mt-4">
+          <button
+            onClick={() => generateePdf(m)}
+            className="px-4 py-2 rounded-xl text-sm font-medium
+                       bg-blue-500 text-white shadow hover:opacity-90 transition"
+          >
+            Voir l'ordre de mission
+          </button>
+        </div>
+      )}
+    </li>
+  );
+})}
   </ul>
 
    </div>

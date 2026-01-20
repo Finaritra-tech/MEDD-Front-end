@@ -58,41 +58,38 @@ setMissions(filtered);
     fetchMissions();
   }, [user, status]);
 
-  const generateePdf = async (mission) => {
+const generateePdf = async (mission) => {
   try {
     const response = await api.post(
       "om-pdf/",
-      {
-        id: mission.id,
-        objet: mission.objet,
-        lieu: mission.lieu,
-        date_depart: mission.date_depart,
-        date_retour: mission.date_retour,
-        description: mission.description,
-        agent: mission.agent,
-        cree_par: mission.cree_par,
-        destinatairee: mission.destinatairee,
-      },
+      { id: mission.id },
       {
         responseType: "blob",
+        timeout: 30000, 
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access")}`,
         },
       }
     );
 
-    // Télécharger le PDF
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const file = new Blob([response.data], {
+      type: "application/pdf",
+    });
+
+    const url = window.URL.createObjectURL(file);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "ordre_mission.pdf");
+    link.download = "ordre_mission.pdf";
     document.body.appendChild(link);
     link.click();
     link.remove();
-
+    window.URL.revokeObjectURL(url);
 
   } catch (error) {
-    console.error("Erreur génération PDF :", error);
+    // ❗ Ignore les erreurs liées au stream PDF
+    if (error.code !== "ERR_NETWORK") {
+      console.error("Erreur génération PDF :", error);
+    }
   }
 };
 
@@ -158,6 +155,7 @@ const handleDelete = async (id) => {
   <ul className="flex flex-col gap-4">
   {filtere.map((m) => {
     const isPending = m.status?.toLowerCase() === "en attente";
+    const isApproved = m.status?.toLowerCase() === "approuvée";
 
     return (
       <li
@@ -194,7 +192,7 @@ const handleDelete = async (id) => {
           >
             {m.status}
           </span>
-           <button onClick={() => generateMissionPdf(m.id)}>Voir détails (PDF)</button>   
+             
         </div>
 
         {/* ===== ACTIONS POUR EN ATTENTE ===== */}
@@ -214,13 +212,26 @@ const handleDelete = async (id) => {
               <button onClick={() => navigate(`/missions/${m.id}/edit`)}  className="px-4 py-2 rounded-xl text-sm font-medium
                            bg-green-500 text-white
                            shadow hover:opacity-90 transition">Modifier</button> 
-       
+       <button onClick={() => generateMissionPdf(m.id)}   className="px-4 py-2 rounded-xl text-sm font-medium
+                       bg-blue-500 text-white shadow hover:opacity-90 transition">Voir la fiche de demande</button> 
             </div>
           </div>
         )}
+
+         {isApproved && (
+        <div className="mt-4">
+          <button
+            onClick={() => generateePdf(m)}
+            className="px-4 py-2 rounded-xl text-sm font-medium
+                       bg-blue-500 text-white shadow hover:opacity-90 transition"
+          >
+            Voir l'ordre de mission
+          </button>
+        </div>
+      )}
       </li>
     );
-  })}
+  })} 
   </ul>
 
    </div>
