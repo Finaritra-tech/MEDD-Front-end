@@ -3,6 +3,26 @@ import api from "../axiosConfig";
 import Input from "../../UI/input";
 import Button from "../../UI/button";
 
+
+const SUPERIEUR_BY_DIRECTION = {
+  MINISTRE: [
+    "OC-DVOR", "Cabinet", "SG", "ULC", "PRMP", "DGGE", "DGDD", "DREDD"
+  ],
+  "SECRETARIAT GENERAL": [
+    "DCSI", "DAF", "DPSE", "DAJC", "DRH"
+  ],
+  "Organe de Coordination des actions stratégiques pour la Diplomatie Verte et des Organismes Rattachés": [
+    "DDVP", "UCOR", "UCREF"
+  ],
+  "Direction Générale du Développement Durable": [
+    "DMFD", "DEVB", "DPRIDDD"
+  ],
+  "Direction Générale de la Gouvernance Environnementale": [
+    "DAPRNE", "DRGPF", "DPDIDE"
+  ],
+};
+
+
 function AddAgent() {
   const [form, setForm] = useState({
     matricule: "",
@@ -12,6 +32,7 @@ function AddAgent() {
     email: "",
     password: "",
     direction: "DCSI",
+    superieur_hierarchique: "",
   });
 
   const [photo, setPhoto] = useState(null);
@@ -19,9 +40,25 @@ function AddAgent() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+ const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  if (name === "direction") {
+    const superieur = getSuperieurHierarchique(value);
+
+    setForm((prev) => ({
+      ...prev,
+      direction: value,
+      superieur_hierarchique: superieur,
+    }));
+  } else {
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+};
+
 
   const handlePhoto = (e) => {
     const file = e.target.files[0];
@@ -61,13 +98,22 @@ function AddAgent() {
         headers: { "Content-Type": "multipart/form-data" },
       });
       alert("Agent ajouté !");
-      console.log(response.data);
     } catch (error) {
       console.error(error);
       if (error.response) alert(JSON.stringify(error.response.data, null, 2));
       else alert("Erreur réseau");
     }
   };
+
+  const getSuperieurHierarchique = (direction) => {
+  for (const [superieur, directions] of Object.entries(SUPERIEUR_BY_DIRECTION)) {
+    if (directions.includes(direction)) {
+      return superieur;
+    }
+  }
+  return "";
+};
+
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -116,17 +162,42 @@ function AddAgent() {
                    focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all"
           >
             <option value="">-- Sélectionner la direction --</option>
+            <option value="SG">Secrétariat Général</option>
+            <option value="Cabinet">Cabinet</option>
+            <option value="OC-DVOR">OC-DVOR</option>
+            <option value="PRMP">PRMP</option>
+            <option value="DGGE">DGGE</option>
+            <option value="DGDD">DGDD</option>
+            <option value="DREDD">DREDD</option>
             <option value="DCSI">DCSI</option>
             <option value="DAF">DAF</option>
             <option value="DPSE">DPSE</option>
             <option value="DAJC">DAJC</option>
             <option value="DRH">DRH</option>
-            <option value="DGGE">DGGE</option>
-            <option value="DGDD">DGDD</option>
+            <option value="DDVP">DDVP</option>
+            <option value="UCREF">UCREF</option>
+            <option value="UCOR">UCOR</option>
+            <option value="DAPRNE">DAPRNE</option>
+            <option value="DPDIDE">DPDIDE</option>
+            <option value="DRGPF">DRGPF</option>
+            <option value="DMFD">DMFD</option>
+            <option value="DEVD">DEVD</option>
+            <option value="DPRIDDD">DPRIDDD</option>
             <option value="ULC">ULC</option>
+
+
+
+
+
+
+
           </select>
 
+         <Input type="text" name="superieur_hierarchique" placeholder="Supérieur Hiérarchique" value={form.superieur_hierarchique} readOnly />
+
+
           <Input type="file" accept="image/*" onChange={handlePhoto} className="col-span-1 sm:col-span-2" />
+
 
           {preview && (
             <div className="col-span-1 sm:col-span-2">

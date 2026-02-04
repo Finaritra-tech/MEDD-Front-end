@@ -112,8 +112,9 @@ useEffect(() => {
       console.log(form)
 
     } catch (error) {
-      console.error(error);
-      alert("Erreur lors de l’ajout !");
+      // console.error(error);
+      console.log(error.response.data);
+      // alert("Erreur lors de l’ajout !");
     }
   };
 
